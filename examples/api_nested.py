@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask
+from sqlalchemy.orm import synonym
 from flask_rest_jsonapi import Api, ResourceDetail, ResourceList, ResourceRelationship
 from flask_rest_jsonapi.exceptions import ObjectNotFound
 from flask_sqlalchemy import SQLAlchemy
@@ -22,6 +23,7 @@ db = SQLAlchemy(app)
 
 # Create data storage
 class Person(db.Model):
+    default_order = synonym('name')
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     email = db.Column(db.String)
