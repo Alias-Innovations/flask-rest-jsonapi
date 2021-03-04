@@ -2,11 +2,15 @@ from setuptools import setup, find_packages
 
 __version__ = '1.0.0'
 
+with open("README.rst", "r") as fh:
+    long_description = fh.read()
+
 setup(
     name="flask-rested-jsonapi",
     version=__version__,
     description='Flask extension to create REST web api according to JSONAPI 1.0 specification with Flask, Marshmallow \
                  and data provider of your choice (SQLAlchemy, MongoDB, ...)',
+    long_description=long_description,
     url='https://github.com/Alias-Innovations/flask-rested-jsonapi',
     author='Alias Innovations Team',
     author_email='alias-team@aliasinnov.com',

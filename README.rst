@@ -1,9 +1,5 @@
-.. image:: https://badge.fury.io/py/Flask-REST-JSONAPI.svg
-    :target: https://badge.fury.io/py/Flask-REST-JSONAPI
-.. image:: https://travis-ci.org/miLibris/flask-rest-jsonapi.svg
-    :target: https://travis-ci.org/miLibris/flask-rest-jsonapi
-.. image:: https://coveralls.io/repos/github/miLibris/flask-rest-jsonapi/badge.svg
-    :target: https://coveralls.io/github/miLibris/flask-rest-jsonapi
+.. image:: https://badge.fury.io/py/flask-rested-jsonapi.svg
+    :target: https://badge.fury.io/py/flask-rested-jsonapi
 .. image:: https://readthedocs.org/projects/flask-rest-jsonapi/badge/?version=latest
     :target: http://flask-rest-jsonapi.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
@@ -11,7 +7,7 @@
 Flask-RESTed-JSONAPI
 ##################
 
-This is just a maintaned fork of the popular Flask-REST-JSONAPI extension which can be found `here <https://flask-restless.readthedocs.io/>`_
+This is just a maintaned fork of the popular Flask-REST-JSONAPI extension which can be found `here <https://github.com/miLibris/flask-rest-jsonapi>`_
 
 Flask-REST-JSONAPI is a flask extension for building REST APIs. It combines the power of `Flask-Restless <https://flask-restless.readthedocs.io/>`_ and the flexibility of `Flask-RESTful <https://flask-restful.readthedocs.io/>`_ around a strong specification `JSONAPI 1.0 <http://jsonapi.org/>`_. This framework is designed to quickly build REST APIs and fit the complexity of real life projects with legacy data and multiple data storages.
 
