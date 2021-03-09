@@ -41,23 +41,23 @@ def compute_schema(schema_cls, default_kwargs, qs, include):
             if '.' in include_path:
                 related_includes[field] += ['.'.join(include_path.split('.')[1:])]
 
+    # manage sparse fieldsets
+    if schema_cls.opts.type_ in qs.fields:
+        if schema_kwargs.get('only'):
+            schema_kwargs['only'] = list(set(schema_kwargs['only']) & set(qs.fields[schema_cls.opts.type_]))
+        else:
+            schema_kwargs['only'] = qs.fields[schema_cls.opts.type_]
+
     # make sure id field is in only parameter unless marshamllow will raise an Exception
     if schema_kwargs.get('only') is not None and 'id' not in schema_kwargs['only']:
         schema_kwargs['only'] += ('id',)
 
+    # adding included to fields
+    if schema_kwargs.get('only') is not None and len(related_includes.keys()) > 0:
+        schema_kwargs['only'] += related_includes.keys()
+
     # create base schema instance
     schema = schema_cls(**schema_kwargs)
-
-    # manage sparse fieldsets
-    if schema.opts.type_ in qs.fields:
-        tmp_only = set(schema.declared_fields.keys()) & set(qs.fields[schema.opts.type_])
-        if schema.only:
-            tmp_only &= set(schema.only)
-        schema.only = tuple(tmp_only)
-
-        # make sure again that id field is in only parameter unless marshamllow will raise an Exception
-        if schema.only is not None and 'id' not in schema.only:
-            schema.only += ('id',)
 
     # manage compound documents
     if include:
