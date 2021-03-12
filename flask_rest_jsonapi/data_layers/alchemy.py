@@ -514,11 +514,32 @@ class SqlalchemyDataLayer(BaseDataLayer):
         :return Query: the sorted query
         """
         for sort_opt in sort_info:
-            field = sort_opt['field']
-            if not hasattr(self.model, field):
-                raise InvalidSort("{} has no attribute {}".format(self.model.__name__, field))
-            query = query.order_by(getattr(getattr(self.model, field), sort_opt['order'])())
-        return query
+            field = sort_opt["field"]
+            sorted_column = getattr(self.model, field, None)
+
+            if sorted_column is None:
+                raise InvalidSort(
+                    "{} has no attribute {}".format(self.model.__name__, field)
+                )
+
+            mapper = getattr(sorted_column, "mapper", None)
+            if mapper:
+                target_model = mapper.class_
+
+                if not hasattr(target_model, "default_order"):
+                    raise InvalidSort(
+                        "{} must have a 'default_order' attribute to be able to sort by it!".format(target_model.__name__)
+                    )
+
+                query = query.join(target_model, target_model.id == getattr(self.model, "{}_id".format(field))).order_by(
+                    getattr(target_model.default_order, sort_opt["order"])()
+                )
+            else:
+                query = query.order_by(
+                    getattr(getattr(self.model, field), sort_opt["order"])()
+                )
+
+            return query
 
     def paginate_query(self, query, paginate_info):
         """Paginate query according to jsonapi 1.0

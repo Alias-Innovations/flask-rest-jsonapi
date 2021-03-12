@@ -11,6 +11,7 @@ from marshmallow_jsonapi.flask import Schema, Relationship
 from marshmallow import Schema as MarshmallowSchema
 from marshmallow_jsonapi import fields
 from marshmallow import ValidationError
+from sqlalchemy.sql.expression import desc
 
 from flask_rest_jsonapi import Api, ResourceList, ResourceDetail, ResourceRelationship, JsonApiException
 from flask_rest_jsonapi.pagination import add_pagination_links
@@ -566,14 +567,27 @@ def test_json_api_exception():
     JsonApiException(None, None, title='test', status='test')
 
 
-def test_query_string_manager(person_schema):
+def test_query_string_manager_fails_for_invalid_field(person_schema):
     query_string = {'page[slumber]': '3'}
     qsm = QSManager(query_string, person_schema)
     with pytest.raises(BadRequest):
         qsm.pagination
-    qsm.qs['sort'] = 'computers'
+    qsm.qs['sort'] = 'personal_computers'
     with pytest.raises(InvalidSort):
         qsm.sorting
+
+
+def test_query_string_manager_fails_for_many_relationship_sort(person_schema):
+    query_string = {'sort': 'computers'}
+    qsm = QSManager(query_string, person_schema)
+    with pytest.raises(InvalidSort):
+        qsm.sorting
+
+
+def test_query_string_manager(computer_schema):
+    query_string = {'sort': 'owner'}
+    qsm = QSManager(query_string, computer_schema)
+    qsm.sorting
 
 
 def test_resource(app, person_model, person_schema, session, monkeypatch):
@@ -1358,6 +1372,45 @@ def test_sqlalchemy_data_layer_sort_query_error(session, person_model, monkeypat
     with pytest.raises(InvalidSort):
         dl = SqlalchemyDataLayer(dict(session=session, model=person_model))
         dl.sort_query(None, [dict(field='test')])
+
+
+
+def test_sqlalchemy_data_layer_sort_succeeds_for_relationships(session, computer, person, monkeypatch):
+    class Mapper():
+        class_ = person
+
+    class SynonymCol():
+        def desc(self):
+            pass
+
+    query = session.query()
+
+    def join(target_model, expression):
+        assert target_model == person
+        return query
+
+    monkeypatch.setattr(query, 'join', join)
+    monkeypatch.setattr(person, 'mapper', Mapper(), raising=False)
+    monkeypatch.setattr(person, 'default_order', SynonymCol(), raising=False)
+    monkeypatch.setattr(person, 'id', person.person_id, raising=False)
+    monkeypatch.setattr(computer, 'person_id', person.person_id)
+    computer.person = person
+
+    dl = SqlalchemyDataLayer(dict(session=session, model=computer))
+    dl.sort_query(query, [dict(field='person', order='desc')])
+
+
+def test_sqlalchemy_data_layer_sort_query_error_for_missing_default_order(session, computer, person, monkeypatch):
+    with pytest.raises(InvalidSort):
+        class Mapper():
+            class_ = person
+
+        monkeypatch.setattr(person, 'mapper', Mapper(), raising=False)
+        monkeypatch.setattr(person, '__name__','Person', raising=False)
+        computer.person = person
+
+        dl = SqlalchemyDataLayer(dict(session=session, model=computer))
+        dl.sort_query(session.query, [dict(field='person')])
 
 
 def test_post_list_incorrect_type(client, register_routes, computer):
