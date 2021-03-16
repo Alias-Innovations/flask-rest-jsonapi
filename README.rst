@@ -5,7 +5,7 @@
     :alt: Documentation Status
 
 Flask-RESTed-JSONAPI
-##################
+####################
 
 This is just a maintaned fork of the popular Flask-REST-JSONAPI extension which can be found `here <https://github.com/miLibris/flask-rest-jsonapi>`_
 
