@@ -5,11 +5,11 @@
     :alt: Documentation Status
 
 Flask-RESTed-JSONAPI
-##################
+####################
 
 This is just a maintaned fork of the popular Flask-REST-JSONAPI extension which can be found `here <https://github.com/miLibris/flask-rest-jsonapi>`_
 
-Flask-REST-JSONAPI is a flask extension for building REST APIs. It combines the power of `Flask-Restless <https://flask-restless.readthedocs.io/>`_ and the flexibility of `Flask-RESTful <https://flask-restful.readthedocs.io/>`_ around a strong specification `JSONAPI 1.0 <http://jsonapi.org/>`_. This framework is designed to quickly build REST APIs and fit the complexity of real life projects with legacy data and multiple data storages.
+Flask-REST-JSONAPI is a flask extension for building REST APIs. It combines the power of `Flask-Restless <https://flask-restless.readthedocs.io/>`__ and the flexibility of `Flask-RESTful <https://flask-restful.readthedocs.io/>`__ around a strong specification `JSONAPI 1.0 <http://jsonapi.org/>`__. This framework is designed to quickly build REST APIs and fit the complexity of real life projects with legacy data and multiple data storages.
 
 Install
 =======
@@ -86,14 +86,14 @@ URL                       method  endpoint       Usage
 /persons/<int:person_id>  DELETE  person_detail  Delete a person
 ========================  ======  =============  ===========================
 
-Flask-REST-JSONAPI vs `Flask-RESTful <http://flask-restful-cn.readthedocs.io/en/0.3.5/a>`_
-==========================================================================================
+Flask-REST-JSONAPI vs `Flask-RESTful <http://flask-restful-cn.readthedocs.io/en/0.3.5/a>`__
+===========================================================================================
 
 * In contrast to Flask-RESTful, Flask-REST-JSONAPI provides a default implementation of get, post, patch and delete methods around a strong specification JSONAPI 1.0. Thanks to this you can build REST API very quickly.
 * Flask-REST-JSONAPI is as flexible as Flask-RESTful. You can rewrite every default method implementation to make custom work like distributing object creation.
 
-Flask-REST-JSONAPI vs `Flask-Restless <https://flask-restless.readthedocs.io/en/stable/>`_
-==========================================================================================
+Flask-REST-JSONAPI vs `Flask-Restless <https://flask-restless.readthedocs.io/en/stable/>`__
+===========================================================================================
 
 * Flask-REST-JSONAPI is a real implementation of JSONAPI 1.0 specification. So in contrast to Flask-Restless, Flask-REST-JSONAPI forces you to create a real logical abstration over your data models with `Marshmallow <https://marshmallow.readthedocs.io/en/latest/>`_. So you can create complex resource over your data.
 * In contrast to Flask-Restless, Flask-REST-JSONAPI can use any ORM or data storage through the data layer concept, not only `SQLAlchemy <http://www.sqlalchemy.org/>`_. A data layer is a CRUD interface between your resource and one or more data storage so you can fetch data from any data storage of your choice or create resource that use multiple data storages.
